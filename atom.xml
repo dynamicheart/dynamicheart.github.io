@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Jianbang&#39;s buns shop</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://dynamicheart.github.io/"/>
+  <updated>2017-10-15T04:03:18.000Z</updated>
+  <id>https://dynamicheart.github.io/</id>
+  
+  <author>
+    <name>Jianbang Yang</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CSAPP Processor-Lab大幅降低CPE的技巧</title>
+    <link href="https://dynamicheart.github.io/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/"/>
+    <id>https://dynamicheart.github.io/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/</id>
+    <published>2017-01-19T09:05:37.000Z</published>
+    <updated>2017-10-15T04:03:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过Load-Forwarding、添加新指令(iaddl、leave)以及循环展开这三种方法最多可以将CPE降低至8.4左右，但是满分的要求是将CPE降至7.8，通过改变分支预测、或者利用bug的方法比较繁琐而且违背了程序的准确性。</p><p>由于Y86指令集里面并没有ncopy.ys所需要的条件传送指令，虽然可以通过条件跳转来实现条件传送，但是因为有分支预测错误的存在，流水线处理器会浪费多个周期，使得CPE变高。</p><p>实际上，通过增加新指令的方法来降低CPE是可行的，经试验CPE可以降低到7.01。但是添加新指令的方法很具有技巧性，在实现的过程中会出现很多问题，下面我将一步步讲解如何添加新的指令。</p><a id="more"></a><h2 id="怎样在处理器中添加新的指令？"><a href="#怎样在处理器中添加新的指令？" class="headerlink" title="怎样在处理器中添加新的指令？"></a>怎样在处理器中添加新的指令？</h2><ul><li><p>由于c代码以及h代码的限制以及我们不能修改除了HCL以外的程序，HCL程序中不能随便添加新的指令，所有的指令必须所预留的匹配才能编译成功。但是，处理器给我们预留了一个未使用的指令——IPOP2(本来有其它的用途)，它的十六进制编码为0xE0，这样就可以任意定制指令的编码长度以及功能，我们可以用IPOP2来实现条件传送的功能。</p></li><li><p>即使没有这个预留的指令，我们利用一些不使用功能码(ifun)的指令创造新的指令，比如，INOP的十六进制编码为0x10，可以用0x11等编码来代表条件传送，通过这种方法也可以创造新的指令，不会有任何冲突。</p></li></ul><h2 id="assemble的过程会失败"><a href="#assemble的过程会失败" class="headerlink" title="assemble的过程会失败"></a>assemble的过程会失败</h2><p>由于我们不能修改yas的c代码，yas中无法将IPOP2汇编，因此直接在ncopy.ys中书写IPOP2会导致汇编失败，我们可以利用.byte、.word、.long直接将指令的十六进制编码写在ncopy.ys中，通过这种方法我们也可以使用方法二(0x11)来添加新的指令，但这些都会出现很多问题。</p><h2 id="correctness-pl会失败"><a href="#correctness-pl会失败" class="headerlink" title=".correctness.pl会失败"></a>.correctness.pl会失败</h2><p>不加-p是使用seq处理器来测试ncopy.ys程序，因为没有在相应的seq处理器中添加我们的新指令，因此ncopy.ys中的新指令会被认为是异常。</p><h2 id="最保险的做法"><a href="#最保险的做法" class="headerlink" title="最保险的做法"></a>最保险的做法</h2><ul><li><p>保证nocpy.ys的逻辑是正确的，仍然用条件跳转来实现，这样在任何y86处理器上运行都能得到正确的结果。</p></li><li><p>在nopy.ys程序中做一些标记，在检测到这个标记后，我们的流水线处理器不按照nopy.ys本来的逻辑运行，而是在f_icode中将条件跳转变成条件传送（新指令），同时predPC也要做出相应的改变，跳过一些不必执行的指令。</p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Loop1:</div><div class="line">    mrmovl 56(%ebx),%esi</div><div class="line">    .word 0x6146</div><div class="line">    .long 0x38</div><div class="line">    andl %esi,%esi</div><div class="line">    jle Loop2</div><div class="line">    iaddl $1,%eax</div><div class="line">Loop2:</div><div class="line">    mrmovl 52(%ebx),%esi</div><div class="line">    .word 0x6146</div><div class="line">    .long 0x34</div><div class="line">    andl %esi,%esi</div><div class="line">    jle Loop3</div><div class="line">    iaddl $1,%eax</div></pre></td></tr></table></figure><ul><li>.word 0x6146 和 .long 0x38是rmmovl %esi,56(%ecx)的十六进制编码，rmmovl不需要使用功能码，将其功能码设置为6，不影响程序本来的逻辑，而且在其它正常的程序中不可能会出现这种情况，我们利用这个功能码来特殊标记我们的程序，使其在jle Loop2时执行的是条件传送指令（ICNG），而且将f_predPC设置为f_valC,使其跳过iaddl $1,%eax指令。</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">int f_icode = [</div><div class="line">        imem_error : INOP;</div><div class="line">    imem_icode == IJXX &amp;&amp; imem_ifun == CLE</div><div class="line">     &amp;&amp; E_icode ==  IRMMOVL &amp;&amp; E_ifun == CG: ICINGJ;</div><div class="line">        1: imem_icode;</div><div class="line">];</div><div class="line"></div><div class="line">int f_predPC = [</div><div class="line">        f_icode in &#123; IJXX, ICALL, ICINGJ &#125; : f_valC;</div><div class="line">        1 : f_valP;</div><div class="line">];</div></pre></td></tr></table></figure><h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p><a href="https://github.com/dynamicheart/icslabs/tree/master/lab6" target="_blank" rel="external">https://github.com/dynamicheart/icslabs/tree/master/lab6</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;通过Load-Forwarding、添加新指令(iaddl、leave)以及循环展开这三种方法最多可以将CPE降低至8.4左右，但是满分的要求是将CPE降至7.8，通过改变分支预测、或者利用bug的方法比较繁琐而且违背了程序的准确性。&lt;/p&gt;
+&lt;p&gt;由于Y86指令集里面并没有ncopy.ys所需要的条件传送指令，虽然可以通过条件跳转来实现条件传送，但是因为有分支预测错误的存在，流水线处理器会浪费多个周期，使得CPE变高。&lt;/p&gt;
+&lt;p&gt;实际上，通过增加新指令的方法来降低CPE是可行的，经试验CPE可以降低到7.01。但是添加新指令的方法很具有技巧性，在实现的过程中会出现很多问题，下面我将一步步讲解如何添加新的指令。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="CSAPP" scheme="https://dynamicheart.github.io/tags/CSAPP/"/>
+    
+      <category term="Lab" scheme="https://dynamicheart.github.io/tags/Lab/"/>
+    
+      <category term="Processor" scheme="https://dynamicheart.github.io/tags/Processor/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Leetcode-#135Candy算法正确性的证明</title>
+    <link href="https://dynamicheart.github.io/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/"/>
+    <id>https://dynamicheart.github.io/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/</id>
+    <published>2017-01-19T08:13:16.000Z</published>
+    <updated>2017-10-15T04:08:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ul><li>There are N children standing in a line. Each child is assigned a rating value.</li><li>You are giving candies to these children subjected to the following requirements:<ul><li>Each child must have at least one candy.</li><li>Children with a higher rating get more candies than their neighbors.</li></ul></li><li>What is the minimum candies you must give?</li></ul><p>来源：<a href="https://leetcode.com/problems/candy/" target="_blank" rel="external">https://leetcode.com/problems/candy/</a></p><a id="more"></a><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>每个小孩都会至少拿到一颗糖，所以将每个小孩应得得糖果数初始化为1，之后先从左往右扫一遍，再从右左扫一遍，使得有更高分数的小孩，会比邻近的小孩拿到更多的糖果，算法的正确性是肯定的。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>&#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">candy</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; ratings)</span></span>&#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; portion(ratings.size(),<span class="number">1</span>);</div><div class="line"></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">unsigned</span> i = <span class="number">1</span>;i&lt;ratings.size();i++)&#123;</div><div class="line">            <span class="keyword">if</span>((ratings[i]&gt;ratings[i<span class="number">-1</span>]))&#123;</div><div class="line">                portion[i] = portion[i<span class="number">-1</span>] + <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> total = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">unsigned</span> i = ratings.size() - <span class="number">1</span> ; i &gt; <span class="number">0</span>;i--)&#123;</div><div class="line">            <span class="keyword">if</span>((ratings[i<span class="number">-1</span>]&gt;ratings[i])&amp;&amp;portion[i<span class="number">-1</span>]&lt;=portion[i])&#123;</div><div class="line">                portion[i<span class="number">-1</span>] = portion[i] + <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">            total += portion[i];</div><div class="line">        &#125;</div><div class="line">        total += portion[<span class="number">0</span>];</div><div class="line"></div><div class="line">        <span class="keyword">return</span> total;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure><h2 id="最优解证明"><a href="#最优解证明" class="headerlink" title="最优解证明"></a>最优解证明</h2><ul><li>一般的情况，用柱状图的高度代表每个孩子获得的糖果数量多少，糖果的分配会呈现多个峰形，也有只升不降以及只降不升的峰，我们统称这些形状都为峰。</li><li>每一座峰都是独立的，相邻的峰之间互不影响。</li><li>如果能够证明每座峰所代表的糖果分配是最优的，那么总的糖果分配便是最优的。</li><li>很容易证明，每一座峰的结构都是最优的。</li></ul><img src="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/peaks.png" alt="Peaks" title="Peaks"><h2 id="另一个算法"><a href="#另一个算法" class="headerlink" title="另一个算法"></a>另一个算法</h2><p>由上面的证明很容易得到下面一个改进的算法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">candy</span><span class="params">(<span class="keyword">int</span>[] ratings)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (ratings == <span class="keyword">null</span> || ratings.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> total = <span class="number">1</span>, prev = <span class="number">1</span>, countDown = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; ratings.length; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (ratings[i] &gt;= ratings[i-<span class="number">1</span>]) &#123;</div><div class="line">                <span class="keyword">if</span> (countDown &gt; <span class="number">0</span>) &#123;</div><div class="line">                    total += countDown*(countDown+<span class="number">1</span>)/<span class="number">2</span>; <span class="comment">// arithmetic progression</span></div><div class="line">                    <span class="keyword">if</span> (countDown &gt;= prev) total += countDown - prev + <span class="number">1</span>;</div><div class="line">                    countDown = <span class="number">0</span>;</div><div class="line">                    prev = <span class="number">1</span>;</div><div class="line">                &#125;</div><div class="line">                prev = ratings[i] == ratings[i-<span class="number">1</span>] ? <span class="number">1</span> : prev+<span class="number">1</span>;</div><div class="line">                total += prev;</div><div class="line">            &#125; <span class="keyword">else</span> countDown++;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (countDown &gt; <span class="number">0</span>) &#123; <span class="comment">// if we were descending at the end</span></div><div class="line">            total += countDown*(countDown+<span class="number">1</span>)/<span class="number">2</span>;</div><div class="line">            <span class="keyword">if</span> (countDown &gt;= prev) total += countDown - prev + <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> total;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p><p>来源：<a href="https://discuss.leetcode.com/topic/8208/one-pass-constant-space-java-solution" target="_blank" rel="external">https://discuss.leetcode.com/topic/8208/one-pass-constant-space-java-solution</a></p><h2 id="其它资料"><a href="#其它资料" class="headerlink" title="其它资料"></a>其它资料</h2><p>PDF：<a href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/candy.pdf" title="candy.pdf">candy.pdf</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;There are N children standing in a line. Each child is assigned a rating value.&lt;/li&gt;
+&lt;li&gt;You are giving candies to these children subjected to the following requirements:&lt;ul&gt;
+&lt;li&gt;Each child must have at least one candy.&lt;/li&gt;
+&lt;li&gt;Children with a higher rating get more candies than their neighbors.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;What is the minimum candies you must give?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;来源：&lt;a href=&quot;https://leetcode.com/problems/candy/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://leetcode.com/problems/candy/&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Leetcode" scheme="https://dynamicheart.github.io/tags/Leetcode/"/>
+    
+      <category term="proof" scheme="https://dynamicheart.github.io/tags/proof/"/>
+    
+      <category term="algorithm" scheme="https://dynamicheart.github.io/tags/algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://dynamicheart.github.io/2017/01/18/hello-World/"/>
+    <id>https://dynamicheart.github.io/2017/01/18/hello-World/</id>
+    <published>2017-01-18T10:55:05.000Z</published>
+    <updated>2017-10-15T05:44:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>My story of coding.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;My story of coding.&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>

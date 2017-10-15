@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Jianbang&#39;s buns shop</title>
+  <meta name="viewport" content="width=device-width">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Jianbang&#39;s buns shop">
+<meta property="og:url" content="https://dynamicheart.github.io/index.html">
+<meta property="og:site_name" content="Jianbang&#39;s buns shop">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jianbang&#39;s buns shop">
+  
+    <link rel="alternative" href="/atom.xml" title="Jianbang&#39;s buns shop" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Jianbang&#39;s buns shop</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dynamicheart.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-csapp-processor-lab-how-to-reduce-cpe" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/" class="article-date">
+  <time datetime="2017-01-19T09:05:37.000Z" itemprop="datePublished">2017-01-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">Jianbang Yang</span>
+		<div class="commentscount">
+			
+				<a href="https://dynamicheart.github.io/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/#disqus_thread" class="article-comment-link">Comments</a>
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/">CSAPP Processor-Lab大幅降低CPE的技巧</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+			<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过Load-Forwarding、添加新指令(iaddl、leave)以及循环展开这三种方法最多可以将CPE降低至8.4左右，但是满分的要求是将CPE降至7.8，通过改变分支预测、或者利用bug的方法比较繁琐而且违背了程序的准确性。</p>
+<p>由于Y86指令集里面并没有ncopy.ys所需要的条件传送指令，虽然可以通过条件跳转来实现条件传送，但是因为有分支预测错误的存在，流水线处理器会浪费多个周期，使得CPE变高。</p>
+<p>实际上，通过增加新指令的方法来降低CPE是可行的，经试验CPE可以降低到7.01。但是添加新指令的方法很具有技巧性，在实现的过程中会出现很多问题，下面我将一步步讲解如何添加新的指令。</p>
+			
+				<p class="article-more-link">
+					<a href="/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/#more">Read More</a>
+				</p>
+      
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lab/">Lab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Processor/">Processor</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-correctness-proof-of-the-algorithm-leetcode-135-candy" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/" class="article-date">
+  <time datetime="2017-01-19T08:13:16.000Z" itemprop="datePublished">2017-01-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">Jianbang Yang</span>
+		<div class="commentscount">
+			
+				<a href="https://dynamicheart.github.io/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/#disqus_thread" class="article-comment-link">Comments</a>
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/">Leetcode-#135Candy算法正确性的证明</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+			<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ul>
+<li>There are N children standing in a line. Each child is assigned a rating value.</li>
+<li>You are giving candies to these children subjected to the following requirements:<ul>
+<li>Each child must have at least one candy.</li>
+<li>Children with a higher rating get more candies than their neighbors.</li>
+</ul>
+</li>
+<li>What is the minimum candies you must give?</li>
+</ul>
+<p>来源：<a href="https://leetcode.com/problems/candy/" target="_blank" rel="external">https://leetcode.com/problems/candy/</a></p>
+			
+				<p class="article-more-link">
+					<a href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/#more">Read More</a>
+				</p>
+      
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Leetcode/">Leetcode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/proof/">proof</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-hello-World" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/01/18/hello-World/" class="article-date">
+  <time datetime="2017-01-18T10:55:05.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Jianbang Yang</span>
+		<div class="commentscount">
+			
+				<a href="https://dynamicheart.github.io/2017/01/18/hello-World/#disqus_thread" class="article-comment-link">Comments</a>
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/01/18/hello-World/">Hello World</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>My story of coding.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:dynamicheart.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Jianbang&#39;s buns shop</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Jianbang Yang<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+<script>
+  var disqus_shortname = 'dynamicheart';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
