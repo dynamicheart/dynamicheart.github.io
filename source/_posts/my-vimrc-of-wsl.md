@@ -27,7 +27,7 @@ sh ~/.vim_runtime/install_awesome_vimrc.sh
 
 [Git Repository](https://github.com/amix/vimrc)
 
-# Show Line Number
+# Show Line Number And Set Tab Size
 
 Create a custom configuration file.
 ```bash
@@ -37,7 +37,10 @@ torch ~/.vim_runtime/my_configs.vim
 and add a new line:
 ```
 set number
+set tabstop 2
 ```
+
+[reference](https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces)
 
 # Choose A More Suitable Theme
 
@@ -57,15 +60,6 @@ set t_ut=
 ```
 
 The relavent github issue is [here](https://github.com/Microsoft/BashOnWindows/issues/1706)
-
-# Use vim-airline
-Do these commands on terminal:
-```bash
-cd ~/.vim_runtime/sources_non_forked
-git clone git@github.com:vim-airline/vim-airline.git
-git clone git@github.com:vim-airline/vim-airline-themes.git
-```
-Then enter vim and run :Helptags to generate help tags.
 
 # Show NERDTree on Startup
 
