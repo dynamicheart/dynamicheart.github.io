@@ -43,7 +43,7 @@ set number
 
 Add below lines to your my_configs.vim file.
 
-```bash
+```
 let g:solarized_termcolors=256
 syntax enable
 set background=light
@@ -51,7 +51,7 @@ colorscheme solarized
 ```
 
 However, the color display is weird. The solution is to add two more lines
-```bash
+```
 set term=screen-256color
 set t_ut=
 ```
@@ -71,17 +71,17 @@ Then enter vim and run :Helptags to generate help tags.
 
 Add below to your my_configs.vim file:
 
-```bash
+```
 autocmd vimenter * NERDTree
 ```
 
 Besides, you can map a Ctrl+n to open NERDTree by do below:
-```bash
+```
 map <C-n> :NERDTreeToggle<CR>
 ```
 
 Start with nerdtree open but main window focused:
-```bash
+```
 autocmd vimenter * wincmd p
 ```
 
@@ -95,3 +95,50 @@ The auto configuration tool does not include some famous plugins, such as YouCom
 - Install [vundle](https://github.com/VundleVim/Vundle.vim)
 - Install [vim-airline](https://github.com/vim-airline/vim-airline)
 - Install [vim-airline-theme](https://github.com/vim-airline/vim-airline-themes)
+
+# Some Tricks When Installing vim-airline
+Uninstall lightline.vim first by do below on terminal:
+```bash
+rm -rf ~/.vim_runtime/sources_non_forked/lightline.vim
+```
+And add below to you ~/.vimrc file:
+```
+" vim-airline 
+" https://github.com/vim-airline/vim-airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+" Incompatible powerline symbols for Inziu Iosevka font
+" https://github.com/vim-airline/vim-airline/wiki/FAQ
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.linenr = " " 
+" https://github.com/vim-airline/vim-airline/issues/1397
+let g:airline_symbols.whitespace = " "
+```
+and ~/.vim_runtime/my_configs.vim:
+```
+set number
+set tabstop=2
+
+" Fix display bug
+" https://github.com/Microsoft/BashOnWindows/issues/1706
+set term=screen-256color
+set t_ut=
+
+" Color theme
+" https://github.com/altercation/vim-colors-solarized
+let g:solarized_termcolors=256
+syntax enable
+set background=light
+colorscheme solarized
+
+" NERDtree
+" https://github.com/scrooloose/nerdtree
+autocmd vimenter * NERDTree
+autocmd vimenter * wincmd p
+map <C-n> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+```
+[Here](https://gist.github.com/dynamicheart/bbdd0bc18494a41969006f9edf20e3f3) are the complete configuration files.
