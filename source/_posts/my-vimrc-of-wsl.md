@@ -11,6 +11,8 @@ tags:
 
 Recently, I have been using ubuntu-on-windows for a while. It's very convenient and I don't need to install dual system any more. However, sometimes it's not that same as a native linux system when configurating some softwares. This article gives a detailed instruction of how to configure a good-looking, useful and powerful vim editor.
 
+{% asset_img rendering.png This is an redering image %}
+
 <!--more-->
 
 # Choose An Awesome Font
@@ -31,7 +33,7 @@ sh ~/.vim_runtime/install_awesome_vimrc.sh
 
 Create a custom configuration file.
 ```bash
-torch ~/.vim_runtime/my_configs.vim
+touch ~/.vim_runtime/my_configs.vim
 ```
 
 and add a new line:
@@ -89,6 +91,7 @@ The auto configuration tool does not include some famous plugins, such as YouCom
 - Install [vundle](https://github.com/VundleVim/Vundle.vim)
 - Install [vim-airline](https://github.com/vim-airline/vim-airline)
 - Install [vim-airline-theme](https://github.com/vim-airline/vim-airline-themes)
+- Install [YouCompleteMe](https://github.com/Valloric/YouCompleteMe)
 
 # Some Tricks When Installing vim-airline
 Uninstall lightline.vim first by do below on terminal:
@@ -112,6 +115,7 @@ let g:airline_symbols.linenr = " "
 let g:airline_symbols.whitespace = " "
 ```
 and ~/.vim_runtime/my_configs.vim:
+
 ```
 set number
 set tabstop=2
@@ -135,4 +139,12 @@ autocmd vimenter * wincmd p
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 ```
+
+Then enter vim and run:
+```
+:AirlineTheme <theme>
+```
+
+I prefer solarized.
+
 [Here](https://gist.github.com/dynamicheart/bbdd0bc18494a41969006f9edf20e3f3) are the complete configuration files.
