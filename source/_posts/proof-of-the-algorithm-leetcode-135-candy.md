@@ -1,5 +1,5 @@
 ---
-title: 'Leetcode-#135Candy算法正确性的证明'
+title: Proof of The algorithm In Leetcode#135 Candy
 tags:
   - Leetcode
   - proof
@@ -7,22 +7,19 @@ tags:
 date: 2017-01-19 16:13:16
 ---
 
-## 问题描述
+## Problem Description
 
-- There are N children standing in a line. Each child is assigned a rating value.
-- You are giving candies to these children subjected to the following requirements:
-  - Each child must have at least one candy.
-  - Children with a higher rating get more candies than their neighbors.
-- What is the minimum candies you must give?
+> - There are N children standing in a line. Each child is assigned a rating value.
+> - You are giving candies to these children subjected to the following requirements:
+>   - Each child must have at least one candy.
+>   - Children with a higher rating get more candies than their neighbors.
+> - What is the minimum candies you must give?
 
-来源：[https://leetcode.com/problems/candy/](https://leetcode.com/problems/candy/)
+From: [https://leetcode.com/problems/candy/](https://leetcode.com/problems/candy/)
 
 <!--more-->
 
-## 代码
-
-每个小孩都会至少拿到一颗糖，所以将每个小孩应得得糖果数初始化为1，之后先从左往右扫一遍，再从右左扫一遍，使得有更高分数的小孩，会比邻近的小孩拿到更多的糖果，算法的正确性是肯定的。
-
+## Solution
 ```cpp
  class Solution{
  public:
@@ -48,18 +45,28 @@ date: 2017-01-19 16:13:16
      }
  };
 ```
-## 最优解证明
+## Proof of Correctness
 
-- 一般的情况，用柱状图的高度代表每个孩子获得的糖果数量多少，糖果的分配会呈现多个峰形，也有只升不降以及只降不升的峰，我们统称这些形状都为峰。
-- 每一座峰都是独立的，相邻的峰之间互不影响。
-- 如果能够证明每座峰所代表的糖果分配是最优的，那么总的糖果分配便是最优的。
-- 很容易证明，每一座峰的结构都是最优的。
+Every kid will have at least one candy, we give every kid one candy at the beginning. Assumed that kids stand in aline, we scan from left to right. If 
+a kid has a higher rating than his left kid, he can get one more candy than his left kid. Then we do this again from right to left except that we compare a kid with his right kid.
+
+After that, you can not find an exception that a kid with higher rating has
+less candies or same candies than any of his neighbours.
+
+At this point, the algorithm is definitely correct.
+
+## Proof of Optimum
+
+- We use histogram to show how many candies each child gets. In general, the allocation of candies will form one or more peak patterns. 
+- Each peak is independent. Neighbors do not affect each other.
+- If we can prove that the allocation represented by each peak is optimal, the overall allocation is optimal.
+- It's easy to prove that the structure of each peak is optimal.
 
 {% asset_img peaks.png Peaks %}
 
-## 另一个算法
+## Another Solution
 
-由上面的证明很容易得到下面一个改进的算法：
+It's easy to get an improved algorithm from the proof above:
 ```java
 public class Solution {
     public int candy(int[] ratings) {
@@ -86,7 +93,7 @@ public class Solution {
 }
 ```
 
-来源：https://discuss.leetcode.com/topic/8208/one-pass-constant-space-java-solution
+Reference: https://discuss.leetcode.com/topic/8208/one-pass-constant-space-java-solution
 
-## 其它资料
+## Useful Resources
 PDF：{% asset_link candy.pdf candy.pdf %}
