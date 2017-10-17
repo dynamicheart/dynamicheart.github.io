@@ -45,6 +45,56 @@
     <div id="main">
       
   
+    <article id="post-how-to-use-custom-font-in-powershell-under-chinese-enviroment" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/10/17/how-to-use-custom-font-in-powershell-under-chinese-enviroment/" class="article-date">
+  <time datetime="2017-10-17T04:06:21.000Z" itemprop="datePublished">2017-10-17</time>
+</a>
+		</span>
+		<span class="meta-elements author">Jianbang Yang</span>
+		<div class="commentscount">
+			
+				<a href="https://dynamicheart.github.io/2017/10/17/how-to-use-custom-font-in-powershell-under-chinese-enviroment/#disqus_thread" class="article-comment-link">Comments</a>
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/10/17/how-to-use-custom-font-in-powershell-under-chinese-enviroment/">How To Use Custom Font In Powershell Under Chinese Enviroment</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cmd/">cmd</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/powershell/">powershell</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tips/">tips</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-my-vimrc-of-wsl" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -120,14 +170,16 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/">CSAPP Processor-Lab大幅降低CPE的技巧</a>
+      <a class="article-title" href="/2017/01/19/csapp-processor-lab-how-to-reduce-cpe/">CSAPP Processor Lab (lab6) 如何将cpe降至7.1以下</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-			<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过Load-Forwarding、添加新指令(iaddl、leave)以及循环展开这三种方法最多可以将CPE降低至8.4左右，但是满分的要求是将CPE降至7.8，通过改变分支预测、或者利用bug的方法比较繁琐而且违背了程序的准确性。</p>
+			<p><em>如何在保证正确性的情况下巧妙地增加指令</em></p>
+<hr>
+<h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h1><p>通过Load-Forwarding、添加新指令(iaddl、leave)以及循环展开这三种方法最多可以将CPE降低至8.4左右，但是满分的要求是将CPE降至7.8，通过改变分支预测、或者利用bug的方法比较繁琐而且违背了程序的准确性。</p>
 <p>由于Y86指令集里面并没有ncopy.ys所需要的条件传送指令，虽然可以通过条件跳转来实现条件传送，但是因为有分支预测错误的存在，流水线处理器会浪费多个周期，使得CPE变高。</p>
 <p>实际上，通过增加新指令的方法来降低CPE是可行的，经试验CPE可以降低到7.01。但是添加新指令的方法很具有技巧性，在实现的过程中会出现很多问题，下面我将一步步讲解如何添加新的指令。</p>
 			
@@ -144,7 +196,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lab/">Lab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Processor/">Processor</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/csapp/">csapp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ics/">ics</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lab/">lab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pipeline/">pipeline</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/processor/">processor</a></li></ul>
 
 			</span>
 		</div>
@@ -158,17 +210,17 @@
 
 
   
-    <article id="post-correctness-proof-of-the-algorithm-leetcode-135-candy" class="post">
+    <article id="post-proof-of-the-algorithm-leetcode-135-candy" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/" class="article-date">
+			<a href="/2017/01/19/proof-of-the-algorithm-leetcode-135-candy/" class="article-date">
   <time datetime="2017-01-19T08:13:16.000Z" itemprop="datePublished">2017-01-19</time>
 </a>
 		</span>
 		<span class="meta-elements author">Jianbang Yang</span>
 		<div class="commentscount">
 			
-				<a href="https://dynamicheart.github.io/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/#disqus_thread" class="article-comment-link">Comments</a>
+				<a href="https://dynamicheart.github.io/2017/01/19/proof-of-the-algorithm-leetcode-135-candy/#disqus_thread" class="article-comment-link">Comments</a>
 			
 		</div>
 	</footer>
@@ -177,14 +229,15 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/">Leetcode-#135Candy算法正确性的证明</a>
+      <a class="article-title" href="/2017/01/19/proof-of-the-algorithm-leetcode-135-candy/">Proof of The algorithm In Leetcode#135 Candy</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-			<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ul>
+			<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><blockquote>
+<ul>
 <li>There are N children standing in a line. Each child is assigned a rating value.</li>
 <li>You are giving candies to these children subjected to the following requirements:<ul>
 <li>Each child must have at least one candy.</li>
@@ -193,10 +246,11 @@
 </li>
 <li>What is the minimum candies you must give?</li>
 </ul>
-<p>来源：<a href="https://leetcode.com/problems/candy/" target="_blank" rel="external">https://leetcode.com/problems/candy/</a></p>
+</blockquote>
+<p>From: <a href="https://leetcode.com/problems/candy/" target="_blank" rel="external">https://leetcode.com/problems/candy/</a></p>
 			
 				<p class="article-more-link">
-					<a href="/2017/01/19/correctness-proof-of-the-algorithm-leetcode-135-candy/#more">Read More</a>
+					<a href="/2017/01/19/proof-of-the-algorithm-leetcode-135-candy/#more">Read More</a>
 				</p>
       
     
